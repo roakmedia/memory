@@ -11,7 +11,7 @@ export const getShuffledDeck = (nrOfCardGroups, nrOfCardsPerGroup) => {
     .map(({ value }) => value);
 
   return shuffledDeck;
-}
+};
 
 // find value in array and return array with indices
 export const findInArray = (value, arr) => {
@@ -22,4 +22,8 @@ export const findInArray = (value, arr) => {
       index = arr.indexOf(value, index + 1);
   }
   return results;
-}
+};
+
+export const getRandomImage = (theme) => {
+  //
+};

@@ -1,18 +1,18 @@
 const GameConfigForm = ({ handleSubmit }) => {
 
   return (
-    <div className="configForm">
+    <div className="config-form">
       <form onSubmit={(event) => handleSubmit(event)}>
-        <div className="formRow">
+        <div className="form-row">
           <div>Number of matching card groups:</div>
-          <div><input id="nrOfCardGroups" type="number" defaultValue="10" /></div>
+          <div><input type="number" defaultValue="10" /></div>
         </div>
-        <div className="formRow">
+        <div className="form-row">
           <div>Number of cards per group:</div>
-          <div><input id="nrOfCardsPerGroup" type="number" defaultValue="2" /></div>
+          <div><input type="number" defaultValue="2" /></div>
         </div>
         <div>
-          <button className="formButton" type="submit">Create new game</button>
+          <button className="form-button" type="submit">Create new game</button>
         </div>
       </form>
     </div>
