@@ -1,29 +1,51 @@
 .App {
   width: 600px;
   padding: 10px;
+  font-size: 10pt;
+}
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 .card {
-  display: flex;
+  position: relative;
   align-items: center;
   width: 100px;
   height: 130px;
-  background-color: black;
-  font-size: 20pt;
   cursor: pointer;
   user-select: none;
   border-radius: 5px;
 }
 .card .number {
-  text-align: center;
+  font-size: 14pt;
+  font-weight: bolder;
+  color: white;
   width: 100%;
+  padding: 10px;
+}
+.card .back-side,
+.card .front-side {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+}
+.card .back-side {
+  background-color: black;
 }
 .card-show {
-  background-color: grey;
+  pointer-events: none;
 }
-.card-found {
-  background-color: lightgreen;
+.card-show .back-side {
+  background-color: rgba(10, 10, 10, 0.3);
 }
-.cardsContainer.disabledClicks {
+.card-found .back-side {
+  display: none;
+}
+.cards-container.disabled-clicks {
   pointer-events: none;
 }
 .cards {
@@ -31,15 +53,14 @@
   gap: 12px;
   flex-wrap: wrap;
 }
-.configForm {
+.config-form {
   width: 260px;
-  font-size: 10pt;
   padding-bottom: 20px;
 }
-.configForm input {
+.config-form input {
   width: 30px;
 }
-.formRow {
+.form-row {
   display: flex;
   flex-direction: row;
   padding: 2px 0px;

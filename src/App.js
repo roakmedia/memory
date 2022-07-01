@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import './App.css';
 import Cards from './components/Cards';
+import Scores from './components/Scores';
 import GameConfigForm from './components/GameConfigForm';
 import { getShuffledDeck, findInArray } from './utils';
 
@@ -10,6 +11,7 @@ const App = () => {
   const [deckState, setDeckState] = useState([]);
   const [message, setMessage] = useState('');
   const [disabledClicks, setdisabledClicks] = useState(false);
+  const [scores, setScores] = useState({tries: 0, score: 0});
 
   const handleSubmitConfigForm = (event) => {
     // do not submit form
@@ -39,6 +41,7 @@ const App = () => {
     setShuffledDeck(shuffledDeck);
     setDeckState(deckState);
     setdisabledClicks(false);
+    setScores({ tries: 0, score: 0 });
   };
 
   const handleCardClick = (i) => {
@@ -65,10 +68,13 @@ const App = () => {
         for (let i = 0; i < shownCards.length; i++) {
           deckStateCopy[shownCards[i]] = 2;
         }
-      } else { // no, try again! Wait 1 seconds before trying again and disable click
+        setScores(prevState => ({ ...prevState, tries: scores.tries++, score: scores.score+10 }));
+      } else { // no, try again! Wait 1 second before trying again and disable click
         setdisabledClicks(true);
+        setScores(prevState => ({ ...prevState, tries: scores.tries++, score: scores.score-1 }));
         setTimeout(() => {
           for (let i = 0; i < shownCards.length; i++) {
+            // hide shown cards again
             deckStateCopy[shownCards[i]] = 0;
           }
           setDeckState([...deckStateCopy]);
@@ -92,10 +98,13 @@ const App = () => {
   return (
     <div className="App">
       <h1>Memory</h1>
-      <GameConfigForm handleSubmit={handleSubmitConfigForm} />
+      <div className="header">
+        <GameConfigForm handleSubmit={handleSubmitConfigForm} />
+        <Scores tries={scores.tries} score={scores.score} />
+      </div>
 
       {shuffledDeck.length && deckState.length ? (
-        <div className={`cardsContainer ${disabledClicks ? 'disabledClicks' : ''}`}>
+        <div className={`cards-container${disabledClicks ? ' disabled-clicks' : ''}`}>
           <Cards 
             shuffledDeck={shuffledDeck}
             deckState={deckState}
