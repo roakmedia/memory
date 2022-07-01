@@ -1,0 +1,21 @@
+# dotfiles
+.vscode
+.idea
+.DS_Store
+
+# files
+localhost-key.pem
+localhost.pem
+*.pem
+**/public/sw.js
+junit.xml
+report.*.json
+exported-games.json
+
+# folders
+**/.next
+**/node_modules
+**/coverage
+**/server-dist
+**/dist
+example/.jenkins

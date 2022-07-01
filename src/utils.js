@@ -1,3 +1,4 @@
+// generate shuffled deck
 export const getShuffledDeck = (nrOfCardGroups, nrOfCardsPerGroup) => {
   let cards = [];
   for (let i = 1; i <= nrOfCardGroups; i++) {
@@ -12,12 +13,13 @@ export const getShuffledDeck = (nrOfCardGroups, nrOfCardsPerGroup) => {
   return shuffledDeck;
 }
 
-export const find = (needle, haystack) => {
+// find value in array and return array with indices
+export const findInArray = (value, arr) => {
   var results = [];
-  var idx = haystack.indexOf(needle);
-  while (idx !== -1) {
-      results.push(idx);
-      idx = haystack.indexOf(needle, idx + 1);
+  var index = arr.indexOf(value);
+  while (index !== -1) {
+      results.push(index);
+      index = arr.indexOf(value, index + 1);
   }
   return results;
 }
