@@ -11,7 +11,7 @@ const App = () => {
   const [deckState, setDeckState] = useState([]);
   const [message, setMessage] = useState('');
   const [disabledClicks, setdisabledClicks] = useState(false);
-  const [scores, setScores] = useState({tries: 0, score: 0});
+  const [scores, setScores] = useState({tries: 0, score: 0, highScore: 0});
 
   const handleSubmitConfigForm = (event) => {
     // do not submit form
@@ -41,7 +41,7 @@ const App = () => {
     setShuffledDeck(shuffledDeck);
     setDeckState(deckState);
     setdisabledClicks(false);
-    setScores({ tries: 0, score: 0 });
+    setScores(prevState => ({ ...prevState, tries: 0, score: 0 }));
   };
 
   const handleCardClick = (i) => {
@@ -68,7 +68,12 @@ const App = () => {
         for (let i = 0; i < shownCards.length; i++) {
           deckStateCopy[shownCards[i]] = 2;
         }
-        setScores(prevState => ({ ...prevState, tries: scores.tries++, score: scores.score+10 }));
+        const score = scores.score + 10;
+        let highScore = scores.highScore;
+        if (score > scores.highScore) {
+          highScore = score;
+        }
+        setScores(prevState => ({ ...prevState, tries: scores.tries++, score, highScore }));
       } else { // no, try again! Wait 1 second before trying again and disable click
         setdisabledClicks(true);
         setScores(prevState => ({ ...prevState, tries: scores.tries++, score: scores.score-1 }));
@@ -100,7 +105,7 @@ const App = () => {
       <h1>Memory</h1>
       <div className="header">
         <GameConfigForm handleSubmit={handleSubmitConfigForm} />
-        <Scores tries={scores.tries} score={scores.score} />
+        <Scores tries={scores.tries} score={scores.score} highScore={scores.highScore} />
       </div>
 
       {shuffledDeck.length && deckState.length ? (
