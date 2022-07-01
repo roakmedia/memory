@@ -1,0 +1,39 @@
+.App {
+  width: 600px;
+}
+.card {
+  display: flex;
+  align-items: center;
+  width: 100px;
+  height: 130px;
+  background-color: black;
+  font-size: 20pt;
+  cursor: pointer;
+  user-select: none;
+}
+.card .number {
+  text-align: center;
+  width: 100%;
+}
+.card-show {
+  background-color: grey;
+}
+.card-found {
+  background-color: yellow;
+}
+.layedOutDeck {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.configForm {
+  width: 400px;
+  font-size: 10pt;
+}
+.formRow {
+  display: flex;
+  flex-direction: row;
+  padding: 2px 0px;
+  width: 100%;
+  justify-content: space-between;
+}
