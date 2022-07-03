@@ -1,6 +1,6 @@
-const Card = ({ nr, index, handleCardClick, show }) => {
+const Card = ({ nr, index, handleCardClick, status }) => {
   let cardClass;
-  switch (show) {
+  switch (status) {
     case global.config.cardStatus.shown:
       cardClass = 'show';
       break;

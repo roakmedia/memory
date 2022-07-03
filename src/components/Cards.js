@@ -1,11 +1,11 @@
 import Card from './Card';
 
 const Cards = ({ shuffledDeck, deckState, handleCardClick }) => {
-  const cards = shuffledDeck.map((x, key) => {
+  const cards = shuffledDeck.map((nr, index) => {
     // generate unique key, otherwise card won't rerender
-    const cardKey = key.toString()+deckState[key].toString();
+    const cardKey = index.toString()+deckState[index].toString();
     
-    return <Card key={cardKey} show={deckState[key]} index={key} nr={x} handleCardClick={handleCardClick} />;
+    return <Card key={cardKey} status={deckState[index]} index={index} nr={nr} handleCardClick={handleCardClick} />;
   });
 
   return <div className="cards">{cards}</div>
