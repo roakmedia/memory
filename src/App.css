@@ -1,5 +1,5 @@
 .App {
-  width: 600px;
+  width: 1000px;
   padding: 10px;
   font-size: 10pt;
 }
@@ -36,7 +36,9 @@
 .card .back-side {
   background-color: black;
 }
-.card-show {
+.card-show,
+.card-found,
+.cards-container.disabled-clicks {
   pointer-events: none;
 }
 .card-show .back-side {
@@ -44,9 +46,6 @@
 }
 .card-found .back-side {
   display: none;
-}
-.cards-container.disabled-clicks {
-  pointer-events: none;
 }
 .cards {
   display: flex;
