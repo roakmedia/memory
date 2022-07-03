@@ -1,20 +1,20 @@
 const Card = ({ nr, index, handleCardClick, show }) => {
   let cardClass;
   switch (show) {
-    case 1: 
+    case global.config.cardStatus.shown:
       cardClass = 'show';
       break;
-    case 2: 
+    case global.config.cardStatus.found:
       cardClass = 'found';
       break;
-    case 0:
+    case global.config.cardStatus.hidden:
     default:
       cardClass = 'hide';
   }
 
   return (
     <div className={`card card-${cardClass}`} onClick={() => handleCardClick(index)}>
-        <div style={{backgroundImage: 'url(https://picsum.photos/100/130?rd='+nr+')'}} className="front-side">
+        <div style={{backgroundImage: `url(https://picsum.photos/100/130?rd=${nr})`}} className="front-side">
           <div className="number">{nr}</div>
         </div>
         <div className="back-side"></div>

@@ -3,6 +3,7 @@ import './App.css';
 import Cards from './components/Cards';
 import Scores from './components/Scores';
 import GameConfigForm from './components/GameConfigForm';
+import Confetti from 'react-confetti';
 import { getShuffledDeck, findInArray } from './utils';
 
 const App = () => {
@@ -10,12 +11,13 @@ const App = () => {
   const [shuffledDeck, setShuffledDeck] = useState([]);
   const [deckState, setDeckState] = useState([]);
   const [message, setMessage] = useState('');
-  const [disabledClicks, setdisabledClicks] = useState(false);
-  const [scores, setScores] = useState({tries: 0, score: 0});
+  const [disabledClicks, setDisabledClicks] = useState(false);
+  const [scores, setScores] = useState({tries: 0, score: 0, highScore: 0});
+  const [confetti, setConfetti] = useState(false);
 
   const handleSubmitConfigForm = (event) => {
     // do not submit form
-    event.preventDefault();
+    event.preventDefault();console.log(confetti);
 
     // name the form values
     const cardNumbers = parseInt(event.target[0].value);
@@ -33,26 +35,30 @@ const App = () => {
 
     // initialize game: shuffle deck and set cards state in deck to 0
     const shuffledDeck = getShuffledDeck(cardNumbers, cardsPerGroup);
-    const deckState = Object.keys(shuffledDeck).fill(0);
+    const deckState = Object.keys(shuffledDeck).fill(global.config.cardStatus.hidden);
 
     // update states
     setMessage('');
     setCardsPerGroup(cardsPerGroup);
     setShuffledDeck(shuffledDeck);
     setDeckState(deckState);
-    setdisabledClicks(false);
-    setScores({ tries: 0, score: 0 });
+    setDisabledClicks(false);
+    setScores(prevState => ({ ...prevState, tries: 0, score: 0 }));
+    setConfetti(false);
   };
 
-  const handleCardClick = (i) => {
+  const handleCardClick = (cardIndex) => {
+    // clear message
+    setMessage('');
+
     // copy deckState to manipulate
     let deckStateCopy = deckState;
 
     // show card when it's hidden, set status to 1
-    if (deckStateCopy[i] === 0) deckStateCopy[i] = 1;
+    if (deckStateCopy[cardIndex] === 0) deckStateCopy[cardIndex] = global.config.cardStatus.shown;
 
     // check how many cards are shown (status: 1), get indices of shown card(s)
-    const shownCards = findInArray(1, deckStateCopy);
+    const shownCards = findInArray(global.config.cardStatus.shown, deckStateCopy);
 
     if (shownCards.length === cardsPerGroup) {
       let cardNumbers = [];
@@ -66,28 +72,34 @@ const App = () => {
       if (foundSameNumbers.length === cardNumbers.length) { // yes, equal!
         setMessage('Found matching cards!');
         for (let i = 0; i < shownCards.length; i++) {
-          deckStateCopy[shownCards[i]] = 2;
+          deckStateCopy[shownCards[i]] = global.config.cardStatus.found;
         }
-        setScores(prevState => ({ ...prevState, tries: scores.tries++, score: scores.score+10 }));
+        const score = scores.score + 10;
+        let highScore = scores.highScore;
+        if (score > scores.highScore) {
+          highScore = score;
+        }
+        setScores(prevState => ({ ...prevState, tries: scores.tries++, score, highScore }));
       } else { // no, try again! Wait 1 second before trying again and disable click
-        setdisabledClicks(true);
+        setDisabledClicks(true);
         setScores(prevState => ({ ...prevState, tries: scores.tries++, score: scores.score-1 }));
         setTimeout(() => {
           for (let i = 0; i < shownCards.length; i++) {
             // hide shown cards again
-            deckStateCopy[shownCards[i]] = 0;
+            deckStateCopy[shownCards[i]] = global.config.cardStatus.hidden;
           }
           setDeckState([...deckStateCopy]);
-          setdisabledClicks(false);
+          setDisabledClicks(false);
         }, 1000);
       }
     }
 
     // check how many cards / groups of cards have been found (status: 2)
-    const foundCards = findInArray(2, deckStateCopy);
+    const foundCards = findInArray(global.config.cardStatus.found, deckStateCopy);
     if (foundCards.length === deckStateCopy.length) {
       setMessage('Yoohoo! You\'ve won!');
-      setdisabledClicks(true);
+      setDisabledClicks(true);
+      setConfetti(true);
       return;
     }
 
@@ -100,7 +112,7 @@ const App = () => {
       <h1>Memory</h1>
       <div className="header">
         <GameConfigForm handleSubmit={handleSubmitConfigForm} />
-        <Scores tries={scores.tries} score={scores.score} />
+        <Scores scores={scores} />
       </div>
 
       {shuffledDeck.length && deckState.length ? (
@@ -111,9 +123,12 @@ const App = () => {
             handleCardClick={handleCardClick}
           />
         </div>
-      ) : null}
+      ) : (
+        <p>Press the <i>Create new game</i> button to start a new game</p>
+      )}
 
       {message ? <p>{message}</p> : null}
+      {confetti && <Confetti />}
     </div>
   );
 }
