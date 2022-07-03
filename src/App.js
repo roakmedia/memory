@@ -17,7 +17,7 @@ const App = () => {
 
   const handleSubmitConfigForm = (event) => {
     // do not submit form
-    event.preventDefault();console.log(confetti);
+    event.preventDefault();
 
     // name the form values
     const cardNumbers = parseInt(event.target[0].value);
