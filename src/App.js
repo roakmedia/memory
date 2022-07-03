@@ -20,11 +20,11 @@ const App = () => {
     event.preventDefault();
 
     // name the form values
-    const cardNumbers = parseInt(event.target[0].value);
+    const cardGroups = parseInt(event.target[0].value);
     const cardsPerGroup = parseInt(event.target[1].value);
 
     // validate input
-    if (cardNumbers <= 0 || cardsPerGroup <= 0) {
+    if (cardGroups <= 0 || cardsPerGroup <= 0) {
       setMessage('Please enter nr of card groups and nr of cards per group');
       return;
     }
@@ -34,7 +34,7 @@ const App = () => {
     }
 
     // initialize game: shuffle deck and set cards state in deck to 0
-    const shuffledDeck = getShuffledDeck(cardNumbers, cardsPerGroup);
+    const shuffledDeck = getShuffledDeck(cardGroups, cardsPerGroup);
     const deckState = Object.keys(shuffledDeck).fill(global.config.cardStatus.hidden);
 
     // update states
@@ -74,15 +74,16 @@ const App = () => {
         for (let i = 0; i < shownCards.length; i++) {
           deckStateCopy[shownCards[i]] = global.config.cardStatus.found;
         }
+        // set scores
         const score = scores.score + 10;
         let highScore = scores.highScore;
         if (score > scores.highScore) {
           highScore = score;
         }
-        setScores(prevState => ({ ...prevState, tries: scores.tries++, score, highScore }));
+        setScores(prevState => ({ ...prevState, tries: scores.tries+1, score, highScore }));
       } else { // no, try again! Wait 1 second before trying again and disable click
         setDisabledClicks(true);
-        setScores(prevState => ({ ...prevState, tries: scores.tries++, score: scores.score-1 }));
+        setScores(prevState => ({ ...prevState, tries: scores.tries+1, score: scores.score-1 }));
         setTimeout(() => {
           for (let i = 0; i < shownCards.length; i++) {
             // hide shown cards again
